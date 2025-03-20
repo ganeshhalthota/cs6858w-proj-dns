@@ -24,7 +24,7 @@ contract DomainRegistry {
     function registerDomain(string memory domain, string memory ipv4) public payable {
         bytes32 domainHash = namehash(domain);
         require(domains[domainHash].owner == address(0), "Domain already registered");
-        require(msg.value >= registrationFee, "Insufficient registration fee");
+        require(msg.value >= registrationFee, "Insufficient registration fees");
 
         // Transfer the registration fee to the contract owner
         payable(contractOwner).transfer(registrationFee);
