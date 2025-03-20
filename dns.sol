@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Current address: 0xB7E1AFFaF283FDf03040Bf565e4229DE2C510eBa
+// Current address: 0xB73c3AC74A6508c078d47e4F461B59043E8dDa87
 pragma solidity ^0.8.0;
  
 contract DomainRegistry {
@@ -11,15 +11,23 @@ contract DomainRegistry {
  
     mapping(bytes32 => Domain) public domains;
  
-    uint256 public registrationFee = 0.01 ether;    
+    // uint256 public registrationFee = 10 * 10**8; // 10 HBAR (assuming 1 HBAR = 10^8 tinybars)
+    // 20000000 Gwei
+    uint256 public registrationFee = 0.01 ether;
+
+    address public contractOwner;
+
+    constructor() {
+        contractOwner = msg.sender;
+    }
  
     function registerDomain(string memory domain, string memory ipv4) public payable {
         bytes32 domainHash = namehash(domain);
         require(domains[domainHash].owner == address(0), "Domain already registered");
         require(msg.value >= registrationFee, "Insufficient registration fee");
- 
-        // Transfer the registration fee to the smart contract
-        payable(address(this)).transfer(msg.value);
+
+        // Transfer the registration fee to the contract owner
+        payable(contractOwner).transfer(registrationFee);
  
         domains[domainHash] = Domain({
             owner: msg.sender,

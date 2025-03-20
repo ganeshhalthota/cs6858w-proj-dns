@@ -6,6 +6,24 @@
 	"output": {
 		"abi": [
 			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "contractOwner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "bytes32",
@@ -163,11 +181,11 @@
 	},
 	"sources": {
 		"dns.sol": {
-			"keccak256": "0xa486b52bd2d785da26149f36045e2e9097b9b3bf51e933b580df0f55562ef243",
+			"keccak256": "0x3bd7e6a9d02f8a3c57f07cb2e8073ff77e1cf19ff6dd48afddfc1638733b3eca",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://76bf1d1c694097ec7ac93c4877d51dde21ca62e35169801eca5555e58733980b",
-				"dweb:/ipfs/QmNrzd4ZAEvQqWFmYdoXCJtUmkr1FYimNBBFxC4fCGBfYb"
+				"bzz-raw://72d2b95c92954537bad2c266475d5fc296582cb643b5d705e53f2fd186e1648d",
+				"dweb:/ipfs/QmQsh25PM24BkZBPdaCcD8jUMCZ1qfr5kR6Wk3iR1VnTP7"
 			]
 		}
 	},
