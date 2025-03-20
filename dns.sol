@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// Current address: 0xB73c3AC74A6508c078d47e4F461B59043E8dDa87
+// Current address: 0x54188b7d083321C67E43db53d0bD8fAD03c39bf8
 pragma solidity ^0.8.0;
  
 contract DomainRegistry {
