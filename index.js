@@ -1,7 +1,8 @@
+
+require("dotenv").config();
+
 const {
     Client,
-    AccountId,
-    PrivateKey,
     ContractCallQuery,
     ContractExecuteTransaction,
     ContractFunctionParameters,
@@ -9,8 +10,8 @@ const {
   } = require("@hashgraph/sdk");
   
   // Load environment variables
-  const operatorId = AccountId.fromString("");
-  const operatorKey = PrivateKey.fromStringECDSA("");
+  const operatorId = process.env.MY_ACCOUNT_ID;
+  const operatorKey = process.env.MY_PRIVATE_KEY;
   const contractId = "0.0.5775906";
   
   // Initialize Hedera Client
@@ -60,24 +61,12 @@ const {
     try {
       const txContractExecute = new ContractCallQuery()
         .setContractId(contractId)
-        .setGas(10000000)
+        .setGas(100000)
         .setFunction("resolveDomain", new ContractFunctionParameters().addString(domain));
   
       //Sign with the client operator private key to pay for the transaction and submit the query to a Hedera network
       const txContractExecuteResponse = await txContractExecute.execute(client);
   
-      //Request the receipt of the transaction
-      const receiptContractExecuteTx = await txContractExecuteResponse.getReceipt(client);
-  
-      //Get the transaction consensus status
-      const statusContractExecuteTx = receiptContractExecuteTx.status;
-  
-      //Get the Transaction ID
-      const txContractExecuteId = txContractExecuteResponse.transactionId.toString();
-      console.log("--------------------------------- Execute Contract Flow ---------------------------------");
-      console.log("Consensus status           :", statusContractExecuteTx.toString());
-      console.log("Transaction ID             :", txContractExecuteId);
-      console.log("Hashscan URL               :", "https://hashscan.io/testnet/tx/" + txContractExecuteId);
     } catch (error) {
       console.error("❌ Error registering domain:", error);
     }
@@ -125,9 +114,9 @@ const {
   
   // Example Execution
   (async () => {
-    // await registerDomain("example.com", "192.168.1.1");
-    await resolveDomain("example.com");
-    // await renewDomain("example.com");
+    //await registerDomain("example.com", "192.168.1.1");
+    //await resolveDomain("example.com");
+    await renewDomain("example.com");
     // await transferDomain("example.com", "0.0.NEWOWNER");
   })();
   
