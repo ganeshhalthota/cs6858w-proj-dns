@@ -10,7 +10,12 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@axiom-crypto/core": "^2.3.8",
     "@hashgraph/sdk": "^2.61.0",
-    "dotenv": "^16.4.7"
+    "csv-parser": "^3.2.0",
+    "csv-writer": "^1.6.0",
+    "dotenv": "^16.4.7",
+    "ethers": "^5.8.0",
+    "node-fetch": "^3.3.2"
   }
 }
