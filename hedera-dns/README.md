@@ -54,3 +54,9 @@ node test/check_acc_balance.js
 ```
 
 ### Execution
+
+```bash
+make deploy_contracts
+make register_domain
+make resolve_domain
+```
