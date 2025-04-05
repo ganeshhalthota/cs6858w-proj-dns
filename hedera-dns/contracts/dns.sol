@@ -18,19 +18,23 @@ contract DomainRegistry {
     );
 
     mapping(bytes32 => Domain) public domains;
- 
-    uint256 public registrationFee = 0.01 ether;
-
-    address public contractOwner;
+    uint256 public registrationFee = 100 wei; // Set the registration fee
+    address public owner;
 
     constructor() {
-        contractOwner = msg.sender;
+        owner = msg.sender;
     }
- 
-    function registerDomain(string memory domain, string memory ipv4) public {
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can call this function");
+        _;
+    }
+
+    function registerDomain(string memory domain, string memory ipv4) public payable {
         bytes32 domainHash = keccak256(abi.encodePacked(domain));
 
         require(domains[domainHash].owner == address(0), "Domain already registered");
+        require(msg.value >= registrationFee, "Insufficient registration fee");
 
         domains[domainHash] = Domain({
             owner: msg.sender,
@@ -40,6 +44,10 @@ contract DomainRegistry {
         });
 
         emit DomainRegistered(msg.sender, domain, ipv4, block.timestamp, block.timestamp + 365 days);
+    }
+
+    function withdraw() public onlyOwner {
+        payable(owner).transfer(address(this).balance);
     }
 
     function renewDomain(string memory domain) public {
