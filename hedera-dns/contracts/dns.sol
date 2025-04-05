@@ -9,16 +9,41 @@ contract DomainRegistry {
         uint256 expiration;
     }
 
+    struct PendingTransfer {
+        address initiator;
+        address newOwner;
+        bool exists;
+    }
+
     event DomainRegistered(
         address indexed owner,
         string domain,
         string ipv4,
-        uint256 registrationTime,
         uint256 expiration
     );
 
+    event DomainRenewed(
+        string domain,
+        uint256 expiration
+    );
+
+    event DomainTransferInit(
+        string domain,
+        address indexed from,
+        address indexed to
+    );
+
+    event DomainTransferred(
+        string domain,
+        address indexed newOwner
+    );
+
     mapping(bytes32 => Domain) public domains;
-    uint256 public registrationFee = 100 wei; // Set the registration fee
+    mapping(bytes32 => PendingTransfer) public pendingTransfers;
+
+    uint256 public registrationFee = 100 wei;
+    uint256 public transferApprovalFee = 50 wei;
+
     address public owner;
 
     constructor() {
@@ -31,7 +56,7 @@ contract DomainRegistry {
     }
 
     function registerDomain(string memory domain, string memory ipv4) public payable {
-        bytes32 domainHash = keccak256(abi.encodePacked(domain));
+        bytes32 domainHash = namehash(domain);
 
         require(domains[domainHash].owner == address(0), "Domain already registered");
         require(msg.value >= registrationFee, "Insufficient registration fee");
@@ -43,7 +68,7 @@ contract DomainRegistry {
             expiration: block.timestamp + 365 days
         });
 
-        emit DomainRegistered(msg.sender, domain, ipv4, block.timestamp, block.timestamp + 365 days);
+        emit DomainRegistered(msg.sender, domain, ipv4, block.timestamp + 365 days);
     }
 
     function withdraw() public onlyOwner {
@@ -55,13 +80,41 @@ contract DomainRegistry {
         require(domains[domainHash].owner == msg.sender, "Not the owner");
 
         domains[domainHash].expiration += 365 days;
+
+        emit DomainRenewed(domain, domains[domainHash].expiration);
     }
 
-    function transferDomain(string memory domain, address newOwner) public {
+    function initiateTransfer(string memory domain, address newOwner) public {
         bytes32 domainHash = namehash(domain);
-        require(domains[domainHash].owner == msg.sender, "Not the owner");
+        require(domains[domainHash].owner == msg.sender, "Not the domain owner");
 
-        domains[domainHash].owner = newOwner;
+        pendingTransfers[domainHash] = PendingTransfer({
+            initiator: msg.sender,
+            newOwner: newOwner,
+            exists: true
+        });
+
+        emit DomainTransferInit(domain, msg.sender, newOwner);
+    }
+
+    function approveTransfer(string memory domain) public payable {
+        bytes32 domainHash = namehash(domain);
+        PendingTransfer memory pending = pendingTransfers[domainHash];
+
+        require(pending.exists, "No transfer pending for this domain");
+        require(pending.newOwner == msg.sender, "You are not the designated new owner");
+        require(msg.value >= transferApprovalFee, "Insufficient transfer approval fee");
+
+        // Transfer fee to contract owner
+        payable(owner).transfer(msg.value);
+
+        // Complete transfer
+        domains[domainHash].owner = msg.sender;
+
+        // Remove pending transfer
+        delete pendingTransfers[domainHash];
+
+        emit DomainTransferred(domain, msg.sender);
     }
 
     function namehash(string memory domain) public pure returns (bytes32) {
