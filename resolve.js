@@ -28,7 +28,7 @@ async function resolveDomain(domain) {
     console.log(
       `✅ Domain Resolved: ${domainData.Domain} → ${domainData.IPv4}`
     );
-    return domainData.ipv4;
+    return domainData.IPv4;
   } catch (error) {
     console.error("❌ Error resolving domain:", error);
     return false;
@@ -67,3 +67,5 @@ const [, , domainArg] = process.argv;
 if (domainArg) {
   return resolveDomain(domainArg);
 }
+
+module.exports = { resolveDomain };

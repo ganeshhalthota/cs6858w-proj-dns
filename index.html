@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Decentralized Domain Manager</title>
+</head>
+<body>
+    <h1>Domain Manager</h1>
+
+    <h2>Register Domain</h2>
+    <input type="text" id="regDomain" placeholder="example.com">
+    <input type="text" id="regIP" placeholder="192.168.0.1">
+    <button onclick="registerDomain()">Register</button>
+    <p id="registerResult"></p>
+
+    <h2>Resolve Domain</h2>
+    <input type="text" id="resDomain" placeholder="example.com">
+    <button onclick="resolveDomain()">Resolve</button>
+    <p id="resolveResult"></p>
+
+    <script>
+        async function registerDomain() {
+            const domain = document.getElementById("regDomain").value;
+            const ipv4 = document.getElementById("regIP").value;
+            const resultEl = document.getElementById("registerResult");
+
+            resultEl.innerText = "⏳ Registering domain...";
+
+            try {
+                const res = await fetch("/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ domain, ipv4 })
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    resultEl.innerText = errorText;
+                    return;
+                }
+
+                const data = await res.text();
+                resultEl.innerText = data;
+
+            } catch (err) {
+                resultEl.innerText = "❌ Error registering domain: " + err.message;
+            }
+        }
+
+        async function resolveDomain() {
+            const domain = document.getElementById("resDomain").value;
+            const resultEl = document.getElementById("resolveResult");
+
+            resultEl.innerText = "🔍 Resolving domain...";
+
+            try {
+                const res = await fetch("/resolve?domain=" + encodeURIComponent(domain));
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    resultEl.innerText = errorText
+                    return;
+                }
+
+                const data = await res.text();
+                resultEl.innerText = data;
+            } catch (err) {
+                resultEl.innerText = "❌ Error resolving domain: " + err.message;
+            }
+        }
+    </script>
+</body>
+</html>
