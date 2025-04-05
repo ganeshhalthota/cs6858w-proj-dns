@@ -1,4 +1,3 @@
-const axios = require("axios");
 const fs = require("fs");
 const csvParser = require("csv-parser");
 require("dotenv").config();
@@ -54,29 +53,19 @@ async function findDomainInCSV(domain) {
     });
 }
 
-// Function to validate transaction details on Hedera blockchain
 async function validateTransactionOnChain(domainData) {
     try {
         const transactionId = domainData["Transaction ID"];
 
         console.log(`🔍 Validating transaction: ${transactionId}`);
-
         const result = await fetchContractExecutionResults(transactionId);
-
-        if (result.domain == domainData.Domain)
-        {
-            return true
-        }
-        else
-        {
-            return false;
-        }
-
+        return result.domain == domainData.Domain;
     } catch (error) {
         console.error("❌ Error fetching transaction from Hedera:", error);
         return false;
     }
 }
+
 
 // Example call
 resolveDomain("yahoo");

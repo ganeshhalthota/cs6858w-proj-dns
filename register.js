@@ -6,11 +6,11 @@ const {
     ContractFunctionParameters
 } = require("@hashgraph/sdk");
 
-const { fetchContractExecutionResults } = require("./fetchResult")
+require("dotenv").config();
 
+const { fetchContractExecutionResults } = require("./fetchResult")
 const fs = require("fs");
 const csvWriter = require("csv-writer").createObjectCsvWriter;
-
 const csvFilePath = "domain_registry.csv";
 const writer = csvWriter({
     path: csvFilePath,
@@ -22,8 +22,6 @@ const writer = csvWriter({
     ],
     append: fs.existsSync(csvFilePath)
 });
-
-require("dotenv").config();
 
 // Hedera client setup
 const client = Client.forTestnet();
@@ -53,7 +51,7 @@ function formatTransactionId(input) {
 // Function to register a domain
 async function registerDomain(domain, ipv4) 
 {
-    try 
+    try
     {
         console.log(`🚀 Registering domain: ${domain} → ${ipv4}`);
 
@@ -106,8 +104,6 @@ function storeInCsv(transactionId, domain, ipv4, expiration)
     }]);
 }
 
-
-// Ask user for input
  rl.question("Enter domain name: ", (domain) => {
     rl.question("Enter IPv4 address: ", (ipv4) => {
         registerDomain(domain, ipv4);
