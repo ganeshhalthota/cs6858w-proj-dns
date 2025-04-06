@@ -3,6 +3,7 @@ const {
   PrivateKey,
   ContractExecuteTransaction,
   ContractId,
+  Hbar,
   ContractFunctionParameters,
 } = require("@hashgraph/sdk");
 
@@ -50,6 +51,7 @@ async function registerDomain(domain, ipv4) {
     const txContractExecute = new ContractExecuteTransaction()
       .setContractId(contractId)
       .setGas(1000000)
+      .setPayableAmount(Hbar.fromTinybars(100))
       .setFunction(
         "registerDomain",
         new ContractFunctionParameters().addString(domain).addString(ipv4)
