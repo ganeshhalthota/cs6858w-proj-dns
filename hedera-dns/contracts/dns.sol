@@ -23,7 +23,9 @@ contract DomainRegistry {
     );
 
     event DomainRenewed(
+        address indexed owner,
         string domain,
+        string ipv4,
         uint256 expiration
     );
 
@@ -34,8 +36,10 @@ contract DomainRegistry {
     );
 
     event DomainTransferred(
+        address indexed owner,
         string domain,
-        address indexed newOwner
+        string ipv4,
+        uint256 expiration
     );
 
     mapping(bytes32 => Domain) public domains;
@@ -85,7 +89,7 @@ contract DomainRegistry {
             domains[domainHash].expiration += 365 days;
         }
 
-        emit DomainRenewed(domain, domains[domainHash].expiration);
+        emit DomainRenewed(msg.sender, domain, domains[domainHash].ipv4, domains[domainHash].expiration);
     }
 
     function initiateTransfer(string memory domain, address newOwner) public {
@@ -118,7 +122,7 @@ contract DomainRegistry {
         // Remove pending transfer
         delete pendingTransfers[domainHash];
 
-        emit DomainTransferred(domain, msg.sender);
+        emit DomainTransferred(msg.sender, domain, domains[domainHash].ipv4, domains[domainHash].expiration);
     }
 
     function namehash(string memory domain) public pure returns (bytes32) {
