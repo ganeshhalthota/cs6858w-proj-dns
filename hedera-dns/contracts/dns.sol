@@ -79,7 +79,11 @@ contract DomainRegistry {
         bytes32 domainHash = namehash(domain);
         require(domains[domainHash].owner == msg.sender, "Not the owner");
 
-        domains[domainHash].expiration += 365 days;
+        if (block.timestamp > domains[domainHash].expiration) {
+            domains[domainHash].expiration = block.timestamp + 365 days;
+        } else {
+            domains[domainHash].expiration += 365 days;
+        }
 
         emit DomainRenewed(domain, domains[domainHash].expiration);
     }
