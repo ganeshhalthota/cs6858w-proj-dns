@@ -4,7 +4,7 @@ const { ethers } = require("ethers");
 const axios = require("axios");
 
 const abi = [
-    "event DomainRegistered(address indexed owner, string domain, string ipv4, uint256 registrationTime, uint256 expiration)"
+    "event DomainRegistered(address indexed owner, string domain, string ipv4, uint256 expiration)"
 ];
 
 const iface = new ethers.utils.Interface(abi);
