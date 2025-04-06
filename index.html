@@ -18,6 +18,11 @@
     <button onclick="resolveDomain()">Resolve</button>
     <p id="resolveResult"></p>
 
+    <h2>Renew Domain</h2>
+    <input type="text" id="renewDomain" placeholder="example.com">
+    <button onclick="renewDomain()">Renew</button>
+    <p id="renewResult"></p>
+
     <script>
         async function registerDomain() {
             const domain = document.getElementById("regDomain").value;
@@ -66,6 +71,32 @@
                 resultEl.innerText = data;
             } catch (err) {
                 resultEl.innerText = "❌ Error resolving domain: " + err.message;
+            }
+        }
+
+        async function renewDomain() {
+            const domain = document.getElementById("renewDomain").value;
+            const resultEl = document.getElementById("renewResult");
+
+            resultEl.innerText = "🔍 Renewing domain...";
+
+            try {
+                const res = await fetch("/renew", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ domain })
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    resultEl.innerText = errorText
+                    return;
+                }
+
+                const data = await res.text();
+                resultEl.innerText = data;
+            } catch (err) {
+                resultEl.innerText = "❌ Error renewing domain: " + err.message;
             }
         }
     </script>

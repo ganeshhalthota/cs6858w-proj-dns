@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { registerDomain } = require("./register");
 const { resolveDomain } = require("./resolve");
+const { renewDomain } = require("./renew");
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,6 +20,22 @@ app.post("/register", async (req, res) => {
     }
   } catch (err) {
     console.error("Register error:", err);
+    res.status(500).send("❌ Internal server error");
+  }
+});
+
+// Renew endpoint
+app.post("/renew", async (req, res) => {
+  const { domain } = req.body;
+  try {
+    const success = await renewDomain(domain);
+    if (success) {
+      res.send("✅ Domain renewed successfully!");
+    } else {
+      res.status(500).send("❌ Domain renew failed.");
+    }
+  } catch (err) {
+    console.error("Renew error:", err);
     res.status(500).send("❌ Internal server error");
   }
 });
