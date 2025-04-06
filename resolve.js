@@ -42,14 +42,16 @@ async function resolveDomain(domain) {
 // Function to find the domain in the CSV file
 const findDomainInCSV = async (domain) => {
   return new Promise((resolve, reject) => {
+    let lastMatch = null;
+
     fs.createReadStream(csvFilePath)
       .pipe(csvParser())
       .on("data", (data) => {
         if (data["Domain"] === domain) {
-          resolve(data); // Return immediately on match
+          lastMatch = data;
         }
       })
-      .on("end", () => resolve(null)) // No match found
+      .on("end", () => resolve(lastMatch))
       .on("error", reject);
   });
 };
