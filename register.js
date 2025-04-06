@@ -13,6 +13,7 @@ const { fetchContractExecutionResults } = require("./fetchResult");
 const fs = require("fs");
 const csvWriter = require("csv-writer").createObjectCsvWriter;
 const csvFilePath = "domain_registry.csv";
+
 const writer = csvWriter({
   path: csvFilePath,
   header: [
@@ -23,6 +24,10 @@ const writer = csvWriter({
   ],
   append: fs.existsSync(csvFilePath),
 });
+
+const register_abi = [
+  "event DomainRegistered(address indexed owner, string domain, string ipv4, uint256 expiration)",
+];
 
 // Hedera client setup
 const client = Client.forTestnet();
@@ -70,11 +75,12 @@ async function registerDomain(domain, ipv4) {
 
     // Fetch contract execution details
     const result = await fetchContractExecutionResults(
+      register_abi,
       formatTransactionId(transactionId)
     );
 
     storeInCsv(
-      result.transactionId,
+      formatTransactionId(transactionId),
       result.domain,
       result.ipv4,
       result.expiration

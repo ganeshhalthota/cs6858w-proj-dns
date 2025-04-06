@@ -1,18 +1,14 @@
 const { ethers } = require("ethers");
 const axios = require("axios");
 
-const abi = [
-  "event DomainRegistered(address indexed owner, string domain, string ipv4, uint256 expiration)",
-];
-
-const iface = new ethers.utils.Interface(abi);
-
 async function fetchContractExecutionResults(
+  abi,
   transactionId,
   retries = 5,
   delay = 2000
 ) {
   try {
+    const iface = new ethers.utils.Interface(abi);
     const url = `https://testnet.mirrornode.hedera.com/api/v1/contracts/results/${transactionId}`;
 
     console.log(url);
@@ -29,15 +25,7 @@ async function fetchContractExecutionResults(
               topics: log.topics,
               data: log.data,
             });
-
-            const result = {
-              transactionId: transactionId,
-              domain: parsedLog.args.domain,
-              ipv4: parsedLog.args.ipv4,
-              expiration: parsedLog.args.expiration,
-            };
-
-            return result; // Return the extracted data
+            return parsedLog.args;
           } catch (err) {
             console.error("❌ Error decoding event log:", err);
             return null;

@@ -7,6 +7,10 @@ const { fetchContractExecutionResults } = require("./fetchResult");
 // Path to the CSV file
 const csvFilePath = "domain_registry.csv";
 
+const register_abi = [
+  "event DomainRegistered(address indexed owner, string domain, string ipv4, uint256 expiration)",
+];
+
 // Function to resolve a domain
 async function resolveDomain(domain) {
   try {
@@ -55,7 +59,7 @@ async function validateTransactionOnChain(domainData) {
     const transactionId = domainData["Transaction ID"];
 
     console.log(`🔍 Validating transaction: ${transactionId}`);
-    const result = await fetchContractExecutionResults(transactionId);
+    const result = await fetchContractExecutionResults(register_abi, transactionId);
     return result.domain == domainData.Domain;
   } catch (error) {
     console.error("❌ Error fetching transaction from Hedera:", error);
