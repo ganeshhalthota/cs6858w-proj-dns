@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const { registerDomain } = require("./register");
 const { resolveDomain } = require("./resolve");
 const { renewDomain } = require("./renew");
+const path = require("path");
 
 const app = express();
 app.use(bodyParser.json());
@@ -54,6 +55,11 @@ app.get("/resolve", async (req, res) => {
       console.error("Resolve error:", error);
       res.status(500).send("❌ Internal Server Error during resolution");
   }
+});
+
+// Serve index.html from parent directory
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "index.html"));
 });
 
 app.listen(3000, () => {
