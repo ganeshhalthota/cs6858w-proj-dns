@@ -9,33 +9,20 @@ const {
 
 require("dotenv").config();
 
+const { format_tx_id } = require("./utils");
 const { TransactionType } = require("./enums");
 const { fetchContractExecutionResults } = require("./fetchResult");
 const { store_in_csv } = require("./csv_operation");
 
-// Hedera client setup
-const client = Client.forTestnet();
-client.setOperator(
-  process.env.MY_ACCOUNT_ID,
-  PrivateKey.fromString(process.env.MY_PRIVATE_KEY)
-);
-
 // Contract ID from environment variables
 const contractId = ContractId.fromString(process.env.HEDERA_CONTRACT_ID);
 
-function formatTransactionId(input) {
-  // Replace '@' with '-'
-  let formatted = input.replace("@", "-");
-
-  // Replace the last '.' with '-'
-  formatted = formatted.replace(/\.(?=[^\.]*$)/, "-");
-
-  return formatted;
-}
-
-async function registerDomain(domain, ipv4) {
+async function registerDomain(accId, priKey, domain, ipv4) {
   try {
     console.log(`🚀 Registering domain: ${domain} → ${ipv4}`);
+
+    const client = Client.forTestnet();
+    client.setOperator(accId, PrivateKey.fromString(priKey));
 
     const txContractExecute = new ContractExecuteTransaction()
       .setContractId(contractId)
@@ -60,12 +47,12 @@ async function registerDomain(domain, ipv4) {
     // Fetch contract execution details
     const result = await fetchContractExecutionResults(
       TransactionType.TX_TYPE_REGISTERED,
-      formatTransactionId(transactionId)
+      format_tx_id(transactionId)
     );
 
     store_in_csv(
       TransactionType.TX_TYPE_REGISTERED,
-      formatTransactionId(transactionId),
+      format_tx_id(transactionId),
       result.domain,
       result.ipv4,
       result.expiration
@@ -78,12 +65,6 @@ async function registerDomain(domain, ipv4) {
     console.error("❌ Error registering domain:", error);
     return false;
   }
-}
-
-const [, , domainArg, ipv4Arg] = process.argv;
-
-if (domainArg && ipv4Arg) {
-  return registerDomain(domainArg, ipv4Arg);
 }
 
 module.exports = { registerDomain };

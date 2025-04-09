@@ -10,9 +10,9 @@ app.use(express.static(__dirname));
 
 // Register endpoint
 app.post("/register", async (req, res) => {
-  const { domain, ipv4 } = req.body;
+  const { accId, priKey, domain, ipv4 } = req.body;
   try {
-    const success = await registerDomain(domain, ipv4);
+    const success = await registerDomain(accId, priKey, domain, ipv4);
     if (success) {
       res.send("✅ Domain registered successfully!");
     } else {
@@ -26,9 +26,9 @@ app.post("/register", async (req, res) => {
 
 // Renew endpoint
 app.post("/renew", async (req, res) => {
-  const { domain } = req.body;
+  const { accId, priKey, domain } = req.body;
   try {
-    const success = await renewDomain(domain);
+    const success = await renewDomain(accId, priKey, domain);
     if (success) {
       res.send("✅ Domain renewed successfully!");
     } else {

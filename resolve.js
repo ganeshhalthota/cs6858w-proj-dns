@@ -43,9 +43,4 @@ async function validateTransactionOnChain(domainData) {
   }
 }
 
-const [, , domainArg] = process.argv;
-if (domainArg) {
-  return resolveDomain(domainArg);
-}
-
 module.exports = { resolveDomain };
