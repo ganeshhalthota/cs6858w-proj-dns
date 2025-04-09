@@ -7,6 +7,10 @@
 <body>
     <h1>Domain Manager</h1>
 
+    <h2>User Details</h2>
+    <input type="text" id="accId" placeholder="0.0.1234567">
+    <input type="text" id="privateKey" placeholder="32 digit key">
+
     <h2>Register Domain</h2>
     <input type="text" id="regDomain" placeholder="example.com">
     <input type="text" id="regIP" placeholder="192.168.0.1">
@@ -25,6 +29,8 @@
 
     <script>
         async function registerDomain() {
+            const accId = document.getElementById("accId").value;
+            const priKey = document.getElementById("privateKey").value;
             const domain = document.getElementById("regDomain").value;
             const ipv4 = document.getElementById("regIP").value;
             const resultEl = document.getElementById("registerResult");
@@ -35,7 +41,7 @@
                 const res = await fetch("/register", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ domain, ipv4 })
+                    body: JSON.stringify({ accId, priKey, domain, ipv4 })
                 });
 
                 if (!res.ok) {
@@ -75,6 +81,8 @@
         }
 
         async function renewDomain() {
+            const accId = document.getElementById("accId").value;
+            const priKey = document.getElementById("privateKey").value;
             const domain = document.getElementById("renewDomain").value;
             const resultEl = document.getElementById("renewResult");
 
@@ -84,7 +92,7 @@
                 const res = await fetch("/renew", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ domain })
+                    body: JSON.stringify({ accId, priKey, domain })
                 });
 
                 if (!res.ok) {
