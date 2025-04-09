@@ -10,20 +10,7 @@ const {
 require("dotenv").config();
 
 const { fetchContractExecutionResults } = require("./fetchResult");
-const fs = require("fs");
-const csvWriter = require("csv-writer").createObjectCsvWriter;
-const csvFilePath = "domain_registry.csv";
-
-const writer = csvWriter({
-  path: csvFilePath,
-  header: [
-    { id: "transactionId", title: "Transaction ID" },
-    { id: "domain", title: "Domain" },
-    { id: "ipv4", title: "IPv4" },
-    { id: "expiration", title: "Expiration" },
-  ],
-  append: fs.existsSync(csvFilePath),
-});
+const { store_in_csv } = require("./csv_operation");
 
 const register_abi = [
   "event DomainRegistered(address indexed owner, string domain, string ipv4, uint256 expiration)",
@@ -79,7 +66,7 @@ async function registerDomain(domain, ipv4) {
       formatTransactionId(transactionId)
     );
 
-    storeInCsv(
+    store_in_csv(
       formatTransactionId(transactionId),
       result.domain,
       result.ipv4,
@@ -93,17 +80,6 @@ async function registerDomain(domain, ipv4) {
     console.error("❌ Error registering domain:", error);
     return false;
   }
-}
-
-function storeInCsv(transactionId, domain, ipv4, expiration) {
-  writer.writeRecords([
-    {
-      transactionId: transactionId,
-      domain: domain,
-      ipv4: ipv4,
-      expiration: expiration,
-    },
-  ]);
 }
 
 const [, , domainArg, ipv4Arg] = process.argv;

@@ -1,11 +1,7 @@
-const fs = require("fs");
-const csvParser = require("csv-parser");
 require("dotenv").config();
 
 const { fetchContractExecutionResults } = require("./fetchResult");
-
-// Path to the CSV file
-const csvFilePath = "domain_registry.csv";
+const { find_domain_in_csv } = require("./csv_operation");
 
 const register_abi = [
   "event DomainRegistered(address indexed owner, string domain, string ipv4, uint256 expiration)",
@@ -15,7 +11,7 @@ const register_abi = [
 async function resolveDomain(domain) {
   try {
     // Step 1: Look up the domain in the CSV file
-    const domainData = await findDomainInCSV(domain);
+    const domainData = await find_domain_in_csv(domain);
     if (!domainData) {
       console.log(`❌ Domain not found in registry: ${domain}`);
       return false;
@@ -39,28 +35,9 @@ async function resolveDomain(domain) {
   }
 }
 
-// Function to find the domain in the CSV file
-const findDomainInCSV = async (domain) => {
-  return new Promise((resolve, reject) => {
-    let lastMatch = null;
-
-    fs.createReadStream(csvFilePath)
-      .pipe(csvParser())
-      .on("data", (data) => {
-        if (data["Domain"] === domain) {
-          lastMatch = data;
-        }
-      })
-      .on("end", () => resolve(lastMatch))
-      .on("error", reject);
-  });
-};
-
 async function validateTransactionOnChain(domainData) {
   try {
     const transactionId = domainData["Transaction ID"];
-
-    console.log(`🔍 Validating transaction: ${transactionId}`);
     const result = await fetchContractExecutionResults(register_abi, transactionId);
     return result.domain == domainData.Domain;
   } catch (error) {

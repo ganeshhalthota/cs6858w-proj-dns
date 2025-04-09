@@ -9,26 +9,12 @@ const {
 
 require("dotenv").config();
 
-const fs = require("fs");
-const csvWriter = require("csv-writer").createObjectCsvWriter;
 const { fetchContractExecutionResults } = require("./fetchResult");
-
-const csvFilePath = "domain_registry.csv";
+const { store_in_csv } = require("./csv_operation");
 
 const renew_abi = [
   "event DomainRenewed(address indexed owner, string domain, string ipv4, uint256 expiration)"
 ];
-
-const writer = csvWriter({
-  path: csvFilePath,
-  header: [
-    { id: "transactionId", title: "Transaction ID" },
-    { id: "domain", title: "Domain" },
-    { id: "ipv4", title: "IPv4" },
-    { id: "expiration", title: "Expiration" },
-  ],
-  append: true, // always append
-});
 
 const client = Client.forTestnet();
 client.setOperator(
@@ -72,14 +58,13 @@ async function renewDomain(domain) {
       formatTransactionId(transactionId)
     );
 
-    await writer.writeRecords([
-      {
-        transactionId: formatTransactionId(transactionId),
-        domain: result.domain,
-        ipv4: result.ipv4,
-        expiration: result.expiration,
-      },
-    ]);
+    store_in_csv(
+      formatTransactionId(transactionId),
+      result.domain,
+      result.ipv4,
+      result.expiration
+    );
+
     return true;
   } catch (error) {
     console.error("❌ Error renewing domain:", error);
