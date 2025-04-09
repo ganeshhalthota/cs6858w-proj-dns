@@ -6,6 +6,7 @@ const csvFilePath = "domain_registry.csv";
 const writer = csvWriter({
   path: csvFilePath,
   header: [
+    { id: "transactionType", title: "Transaction Type" },
     { id: "transactionId", title: "Transaction ID" },
     { id: "domain", title: "Domain" },
     { id: "ipv4", title: "IPv4" },
@@ -14,9 +15,10 @@ const writer = csvWriter({
   append: fs.existsSync(csvFilePath),
 });
 
-function store_in_csv(transactionId, domain, ipv4, expiration) {
+function store_in_csv(transactionType, transactionId, domain, ipv4, expiration) {
   writer.writeRecords([
     {
+      transactionType: transactionType,
       transactionId: transactionId,
       domain: domain,
       ipv4: ipv4,

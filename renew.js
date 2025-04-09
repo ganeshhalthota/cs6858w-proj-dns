@@ -9,12 +9,9 @@ const {
 
 require("dotenv").config();
 
+const { TransactionType } = require("./enums");
 const { fetchContractExecutionResults } = require("./fetchResult");
 const { store_in_csv } = require("./csv_operation");
-
-const renew_abi = [
-  "event DomainRenewed(address indexed owner, string domain, string ipv4, uint256 expiration)"
-];
 
 const client = Client.forTestnet();
 client.setOperator(
@@ -54,11 +51,12 @@ async function renewDomain(domain) {
     console.log(`✅ Domain renewed with Transaction ID: ${transactionId}`);
 
     const result = await fetchContractExecutionResults(
-      renew_abi,
+      TransactionType.TX_TYPE_RENEWED,
       formatTransactionId(transactionId)
     );
 
     store_in_csv(
+      TransactionType.TX_TYPE_RENEWED,
       formatTransactionId(transactionId),
       result.domain,
       result.ipv4,

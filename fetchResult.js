@@ -1,14 +1,15 @@
+const { event_abi } = require("./hedera_events");
 const { ethers } = require("ethers");
 const axios = require("axios");
 
 async function fetchContractExecutionResults(
-  abi,
+  tx_type,
   transactionId,
   retries = 5,
   delay = 2000
 ) {
   try {
-    const iface = new ethers.utils.Interface(abi);
+    const iface = new ethers.utils.Interface(event_abi[tx_type]);
     const url = `https://testnet.mirrornode.hedera.com/api/v1/contracts/results/${transactionId}`;
 
     console.log(url);

@@ -3,10 +3,6 @@ require("dotenv").config();
 const { fetchContractExecutionResults } = require("./fetchResult");
 const { find_domain_in_csv } = require("./csv_operation");
 
-const register_abi = [
-  "event DomainRegistered(address indexed owner, string domain, string ipv4, uint256 expiration)",
-];
-
 // Function to resolve a domain
 async function resolveDomain(domain) {
   try {
@@ -38,7 +34,8 @@ async function resolveDomain(domain) {
 async function validateTransactionOnChain(domainData) {
   try {
     const transactionId = domainData["Transaction ID"];
-    const result = await fetchContractExecutionResults(register_abi, transactionId);
+    const transactionType = domainData["Transaction Type"]
+    const result = await fetchContractExecutionResults(transactionType, transactionId);
     return result.domain == domainData.Domain;
   } catch (error) {
     console.error("❌ Error fetching transaction from Hedera:", error);

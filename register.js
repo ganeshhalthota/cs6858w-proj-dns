@@ -9,12 +9,9 @@ const {
 
 require("dotenv").config();
 
+const { TransactionType } = require("./enums");
 const { fetchContractExecutionResults } = require("./fetchResult");
 const { store_in_csv } = require("./csv_operation");
-
-const register_abi = [
-  "event DomainRegistered(address indexed owner, string domain, string ipv4, uint256 expiration)",
-];
 
 // Hedera client setup
 const client = Client.forTestnet();
@@ -62,11 +59,12 @@ async function registerDomain(domain, ipv4) {
 
     // Fetch contract execution details
     const result = await fetchContractExecutionResults(
-      register_abi,
+      TransactionType.TX_TYPE_REGISTERED,
       formatTransactionId(transactionId)
     );
 
     store_in_csv(
+      TransactionType.TX_TYPE_REGISTERED,
       formatTransactionId(transactionId),
       result.domain,
       result.ipv4,
