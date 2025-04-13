@@ -12,29 +12,7 @@ require("dotenv").config();
 const { format_tx_id } = require("./utils");
 const { TransactionType } = require("./enums");
 const { fetchContractExecutionResults } = require("./fetchResult");
-
-const csvFilePath = "domain_registry.csv";
-
-const renew_abi = [
-  "event DomainRenewed(address indexed owner, string domain, string ipv4, uint256 expiration)"
-];
-
-const writer = csvWriter({
-  path: csvFilePath,
-  header: [
-    { id: "transactionId", title: "Transaction ID" },
-    { id: "domain", title: "Domain" },
-    { id: "ipv4", title: "IPv4" },
-    { id: "expiration", title: "Expiration" },
-  ],
-  append: true, // always append
-});
-
-const client = Client.forTestnet();
-client.setOperator(
-  process.env.OPERATOR_ACCOUNT_ID,
-  PrivateKey.fromString(process.env.OPERATOR_PRIVATE_KEY)
-);
+const { store_in_csv } = require("./csv_operation.js");
 
 const contractId = ContractId.fromString(process.env.HEDERA_CONTRACT_ID);
 
