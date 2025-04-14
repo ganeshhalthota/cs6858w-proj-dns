@@ -50,5 +50,12 @@ async function fetchContractExecutionResults(
   }
 }
 
+async function getEvmAddress(accountId) {
+  const res = await axios.get(`https://testnet.mirrornode.hedera.com/api/v1/accounts/${accountId}`);
+  const evmAddress = res.data.evm_address;
+  console.log(`EVM Address: ${evmAddress}`);
+  return evmAddress
+}
+
 // Export the function so other files can use it
-module.exports = { fetchContractExecutionResults };
+module.exports = { fetchContractExecutionResults, getEvmAddress };
