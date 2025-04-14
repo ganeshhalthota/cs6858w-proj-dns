@@ -13,11 +13,12 @@ The project organization is as follows -
 | File/Folder | Purpose |
 | --- | --- |
 | contracts/ | Solidity smart contracts for DNS logic |
-| scripts/ | Node.js scripts to deploy & interact with contracts |
+| scripts/ | Node.js scripts to deploy & interact with contracts (TODO) |
 | src/ | Backend API (Express.js or direct contract interaction) |
 | frontend/ | UI (React, Next.js, or plain HTML/JS) |
-| test/ | Unit tests for smart contracts |
+| test/ | Unit tests for smart contracts (TODO) |
 | .env | Stores Hedera account credentials securely |
+| server.js | JS file for setting up server and API endpoints |
 
 ### Setup
 
@@ -43,16 +44,12 @@ npm install
 The accounts are setup in `.env` file. The sample is provided in `env.sample`.
 Please rename it to .env and fill in the details of the accounts.
 
-Note: Accounts 1 and 2 are required for testing purposes only. They are not used in the actual contract
-
 #### Testing Setup
 
-The setup can be tested using
-
-```bash
-node test/check_acc_balance.js
-```
+TODO
 
 ### Usage
-
-Open the file `index.html` in a browser and use the provided options to 'register', 'resolve', 'transfer' the domain.
+- Start the server using `node server.js`
+- Load webpage `http://localhost:3000/`
+- Enter the Hedera Accound ID and Private Key
+- Perform Register, Resolve, Renew or Transfer of Domain Operation
