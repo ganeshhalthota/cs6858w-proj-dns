@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const { registerDomain } = require("./register");
 const { resolveDomain } = require("./resolve");
 const { renewDomain } = require("./renew");
+const { initTransfer, approveTransfer } = require("./transfer");
 const path = require("path");
 
 const app = express();
@@ -54,6 +55,36 @@ app.get("/resolve", async (req, res) => {
   } catch (error) {
       console.error("Resolve error:", error);
       res.status(500).send("❌ Internal Server Error during resolution");
+  }
+});
+
+app.post("/init_transfer", async (req, res) => {
+  const { accId, priKey, domain , newAccId} = req.body;
+  try {
+    const success = await initTransfer(accId, priKey, domain, newAccId);
+    if (success) {
+      res.send("✅ Domain Transfer Initiated!");
+    } else {
+      res.status(500).send("❌ Domain Transfer failed.");
+    }
+  } catch (err) {
+    console.error("Transfer error:", err);
+    res.status(500).send("❌ Internal server error");
+  }
+});
+
+app.post("/approve_transfer", async (req, res) => {
+  const { accId, priKey, domain } = req.body;
+  try {
+    const success = await approveTransfer(accId, priKey, domain);
+    if (success) {
+      res.send("✅ Domain Transfer Success!");
+    } else {
+      res.status(500).send("❌ Domain Transfer failed.");
+    }
+  } catch (err) {
+    console.error("Transfer error:", err);
+    res.status(500).send("❌ Internal server error");
   }
 });
 

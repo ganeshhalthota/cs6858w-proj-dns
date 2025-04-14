@@ -27,6 +27,17 @@
     <button onclick="renewDomain()">Renew</button>
     <p id="renewResult"></p>
 
+    <h2>Initiate Transfer</h2>
+    <input type="text" id="initTxDomain" placeholder="example.com">
+    <input type="text" id="initTxAccId" placeholder="0.0.1234567">
+    <button onclick="initTx()">Init</button>
+    <p id="initTxResult"></p>
+
+    <h2>Complete Transfer</h2>
+    <input type="text" id="completeTxDomain" placeholder="example.com">
+    <button onclick="completeTx()">Complete</button>
+    <p id="completeTxResult"></p>
+
     <script>
         async function registerDomain() {
             const accId = document.getElementById("accId").value;
@@ -105,6 +116,63 @@
                 resultEl.innerText = data;
             } catch (err) {
                 resultEl.innerText = "❌ Error renewing domain: " + err.message;
+            }
+        }
+
+        async function initTx() {
+            const accId = document.getElementById("accId").value;
+            const priKey = document.getElementById("privateKey").value;
+            const domain = document.getElementById("initTxDomain").value;
+            const newAccId = document.getElementById("initTxAccId").value;
+            const resultEl = document.getElementById("initTxResult");
+
+            resultEl.innerText = "Initiating Domain Transfer...";
+
+            try {
+                const res = await fetch("/init_transfer", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ accId, priKey, domain, newAccId })
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    resultEl.innerText = errorText
+                    return;
+                }
+
+                const data = await res.text();
+                resultEl.innerText = data;
+            } catch (err) {
+                resultEl.innerText = "❌ Error transferring domain: " + err.message;
+            }
+        }
+
+        async function completeTx() {
+            const accId = document.getElementById("accId").value;
+            const priKey = document.getElementById("privateKey").value;
+            const domain = document.getElementById("completeTxDomain").value;
+            const resultEl = document.getElementById("completeTxResult");
+
+            resultEl.innerText = "Approving Domain transfer...";
+
+            try {
+                const res = await fetch("/approve_transfer", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ accId, priKey, domain })
+                });
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    resultEl.innerText = errorText
+                    return;
+                }
+
+                const data = await res.text();
+                resultEl.innerText = data;
+            } catch (err) {
+                resultEl.innerText = "❌ Error transferring domain: " + err.message;
             }
         }
     </script>
