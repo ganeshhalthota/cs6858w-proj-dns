@@ -25,7 +25,7 @@ async function initTransfer(accId, priKey, domain, newAccId) {
     const client = Client.forTestnet();
     client.setOperator(accId, PrivateKey.fromString(priKey));
 
-    const solidityAddress = getEvmAddress(newAccId);
+    const solidityAddress = await getEvmAddress(newAccId);
 
     const txContractExecute = new ContractExecuteTransaction()
       .setContractId(contractId)
