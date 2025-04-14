@@ -46,8 +46,10 @@ contract DomainRegistry {
     mapping(bytes32 => PendingTransfer) public pendingTransfers;
 
     uint256 public registrationFee = 100 wei;
+    uint256 public renewalFee = 100 wei;
     uint256 public transferApprovalFee = 50 wei;
 
+    // The one who deployed the contract
     address public owner;
 
     constructor() {
@@ -72,6 +74,8 @@ contract DomainRegistry {
             expiration: block.timestamp + 365 days
         });
 
+        payable(owner).transfer(msg.value);
+
         emit DomainRegistered(msg.sender, domain, ipv4, block.timestamp + 365 days);
     }
 
@@ -79,15 +83,18 @@ contract DomainRegistry {
         payable(owner).transfer(address(this).balance);
     }
 
-    function renewDomain(string memory domain) public {
+    function renewDomain(string memory domain) public payable {
         bytes32 domainHash = namehash(domain);
         require(domains[domainHash].owner == msg.sender, "Not the owner");
+        require(msg.value >= renewalFee, "Insufficient renewal fee");
 
         if (block.timestamp > domains[domainHash].expiration) {
             domains[domainHash].expiration = block.timestamp + 365 days;
         } else {
             domains[domainHash].expiration += 365 days;
         }
+
+        payable(owner).transfer(msg.value);
 
         emit DomainRenewed(msg.sender, domain, domains[domainHash].ipv4, domains[domainHash].expiration);
     }
