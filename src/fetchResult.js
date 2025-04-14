@@ -1,12 +1,13 @@
 const { event_abi } = require("./hedera_events");
 const { ethers } = require("ethers");
+const config = require('./config');
 const axios = require("axios");
 
 async function fetchContractExecutionResults(
   tx_type,
   transactionId,
-  retries = 5,
-  delay = 2000
+  retries = config.event_fetch_retry_count,
+  delay = config.delay_between_retry
 ) {
   try {
     const iface = new ethers.utils.Interface(event_abi[tx_type]);

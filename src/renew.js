@@ -4,7 +4,6 @@ const {
   ContractExecuteTransaction,
   ContractId,
   ContractFunctionParameters,
-  Hbar,
 } = require("@hashgraph/sdk");
 
 require("dotenv").config();
@@ -13,8 +12,9 @@ const { format_tx_id } = require("./utils");
 const { TransactionType } = require("./enums");
 const { fetchContractExecutionResults } = require("./fetchResult");
 const { store_in_csv } = require("./csv_operation.js");
+const config = require('./config');
 
-const contractId = ContractId.fromString(process.env.HEDERA_CONTRACT_ID);
+const contractId = ContractId.fromString(config.contract_id);
 
 async function renewDomain(accId, priKey, domain) {
   try {
@@ -25,7 +25,7 @@ async function renewDomain(accId, priKey, domain) {
 
     const txContractExecute = new ContractExecuteTransaction()
       .setContractId(contractId)
-      .setGas(500000)
+      .setGas(config.default_gas)
       .setFunction(
         "renewDomain",
         new ContractFunctionParameters().addString(domain)

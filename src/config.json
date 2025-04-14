@@ -1,0 +1,10 @@
+{
+  "contract_id": "0.0.5854307",
+  "registration_free": 100,
+  "renewal_free": 100,
+  "transfer_fee": 50,
+  "default_gas": 1000000,
+  "event_fetch_retry_count": 5,
+  "delay_between_retry": 2000
+
+}

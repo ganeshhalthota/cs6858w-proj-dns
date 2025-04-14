@@ -13,9 +13,10 @@ const { format_tx_id } = require("./utils");
 const { TransactionType } = require("./enums");
 const { fetchContractExecutionResults } = require("./fetchResult");
 const { store_in_csv } = require("./csv_operation.js");
+const config = require('./config');
 
 // Contract ID from environment variables
-const contractId = ContractId.fromString(process.env.HEDERA_CONTRACT_ID);
+const contractId = ContractId.fromString(config.contract_id);
 
 async function registerDomain(accId, priKey, domain, ipv4) {
   try {
@@ -26,8 +27,8 @@ async function registerDomain(accId, priKey, domain, ipv4) {
 
     const txContractExecute = new ContractExecuteTransaction()
       .setContractId(contractId)
-      .setGas(1000000)
-      .setPayableAmount(Hbar.fromTinybars(100))
+      .setGas(config.default_gas)
+      .setPayableAmount(Hbar.fromTinybars(config.registration_free))
       .setFunction(
         "registerDomain",
         new ContractFunctionParameters().addString(domain).addString(ipv4)

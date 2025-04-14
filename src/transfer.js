@@ -1,6 +1,5 @@
 const {
   Client,
-  AccountId,
   PrivateKey,
   ContractExecuteTransaction,
   ContractId,
@@ -14,9 +13,10 @@ const { format_tx_id } = require("./utils");
 const { TransactionType } = require("./enums");
 const { fetchContractExecutionResults, getEvmAddress } = require("./fetchResult");
 const { store_in_csv } = require("./csv_operation.js");
+const config = require('./config');
 
 // Contract ID from environment variables
-const contractId = ContractId.fromString(process.env.HEDERA_CONTRACT_ID);
+const contractId = ContractId.fromString(config.contract_id);
 
 async function initTransfer(accId, priKey, domain, newAccId) {
   try {
@@ -29,7 +29,7 @@ async function initTransfer(accId, priKey, domain, newAccId) {
 
     const txContractExecute = new ContractExecuteTransaction()
       .setContractId(contractId)
-      .setGas(1000000)
+      .setGas(config.default_gas)
       .setFunction(
         "initiateTransfer",
         new ContractFunctionParameters().addString(domain).addAddress(solidityAddress)
@@ -61,8 +61,8 @@ async function approveTransfer(accId, priKey, domain) {
 
     const txContractExecute = new ContractExecuteTransaction()
       .setContractId(contractId)
-      .setGas(1000000)
-      .setPayableAmount(Hbar.fromTinybars(50))
+      .setGas(config.default_gas)
+      .setPayableAmount(Hbar.fromTinybars(config.transfer_fee))
       .setFunction(
         "approveTransfer",
         new ContractFunctionParameters().addString(domain)
