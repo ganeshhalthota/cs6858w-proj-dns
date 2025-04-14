@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const { fetchContractExecutionResults } = require("./fetchResult");
 const { find_domain_in_csv } = require("./csv_operation");
+const { is_future_time } = require("./utils");
 
 // Function to resolve a domain
 async function resolveDomain(domain) {
@@ -36,7 +37,8 @@ async function validateTransactionOnChain(domainData) {
     const transactionId = domainData["Transaction ID"];
     const transactionType = domainData["Transaction Type"]
     const result = await fetchContractExecutionResults(transactionType, transactionId);
-    return result.domain == domainData.Domain;
+    /* Check if domain Name matches and domain is not expired */
+    return ((result.domain == domainData.Domain) && is_future_time(result.expiration));
   } catch (error) {
     console.error("❌ Error fetching transaction from Hedera:", error);
     return false;
