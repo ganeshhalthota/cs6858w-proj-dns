@@ -3,6 +3,7 @@ const {
   PrivateKey,
   ContractExecuteTransaction,
   ContractId,
+  Hbar,
   ContractFunctionParameters,
 } = require("@hashgraph/sdk");
 
@@ -26,6 +27,7 @@ async function renewDomain(accId, priKey, domain) {
     const txContractExecute = new ContractExecuteTransaction()
       .setContractId(contractId)
       .setGas(config.default_gas)
+      .setPayableAmount(Hbar.fromTinybars(config.renewal_free))
       .setFunction(
         "renewDomain",
         new ContractFunctionParameters().addString(domain)
