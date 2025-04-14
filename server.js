@@ -1,14 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { registerDomain } = require("./register");
-const { resolveDomain } = require("./resolve");
-const { renewDomain } = require("./renew");
-const { initTransfer, approveTransfer } = require("./transfer");
+const { registerDomain } = require("./src/register");
+const { resolveDomain } = require("./src/resolve");
+const { renewDomain } = require("./src/renew");
+const { initTransfer, approveTransfer } = require("./src/transfer");
 const path = require("path");
 
 const app = express();
 app.use(bodyParser.json());
-app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, "frontend")));
 
 // Register endpoint
 app.post("/register", async (req, res) => {
@@ -88,9 +88,8 @@ app.post("/approve_transfer", async (req, res) => {
   }
 });
 
-// Serve index.html from parent directory
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "index.html"));
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.listen(3000, () => {
