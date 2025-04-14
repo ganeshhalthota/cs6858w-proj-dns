@@ -7,8 +7,6 @@ const client = Client.forTestnet();
 // List of accounts and keys from .env file
 const accounts = [
     { id: process.env.OPERATOR_ACCOUNT_ID, key: process.env.OPERATOR_PRIVATE_KEY },
-    { id: process.env.ACCOUNT_ID_1, key: process.env.PRIVATE_KEY_1 },
-    { id: process.env.ACCOUNT_ID_2, key: process.env.PRIVATE_KEY_2 }
 ];
 
 // Function to check balance for each account
