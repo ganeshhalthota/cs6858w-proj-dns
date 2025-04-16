@@ -136,4 +136,3 @@ contract DomainRegistry {
         return keccak256(abi.encodePacked(domain));
     }
 }
-

@@ -17,6 +17,7 @@
     "dotenv": "^16.4.7",
     "ethers": "^5.8.0",
     "express": "^5.1.0",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "solc": "^0.8.9"
   }
 }
