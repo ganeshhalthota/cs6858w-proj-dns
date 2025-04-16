@@ -20,7 +20,7 @@ const contractId = ContractId.fromString(config.contract_id);
 
 async function registerDomain(accId, priKey, domain, ipv4) {
   try {
-    console.log(`🚀 Registering domain: ${domain} → ${ipv4}`);
+    console.log(`Registering domain: ${domain} → ${ipv4}`);
 
     const client = Client.forTestnet();
     client.setOperator(accId, PrivateKey.fromString(priKey));
@@ -39,11 +39,11 @@ async function registerDomain(accId, priKey, domain, ipv4) {
     const receipt = await txResponse.getReceipt(client);
 
     if (receipt.status.toString() !== "SUCCESS") {
-      console.error("❌ Transaction failed:", receipt.status.toString());
+      console.error("Transaction failed:", receipt.status.toString());
       return false;
     }
 
-    console.log(`✅ Domain registered with Transaction ID: ${transactionId}`);
+    console.log(`Domain registered with Transaction ID: ${transactionId}`);
 
     // Fetch contract execution details
     const result = await fetchContractExecutionResults(
@@ -59,11 +59,11 @@ async function registerDomain(accId, priKey, domain, ipv4) {
       result.expiration
     );
 
-    console.log(`✅ Stored in registry`);
+    console.log(`Stored in registry`);
 
     return true;
   } catch (error) {
-    console.error("❌ Error registering domain:", error);
+    console.error("Error registering domain:", error);
     return false;
   }
 }

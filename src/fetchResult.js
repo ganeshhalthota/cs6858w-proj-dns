@@ -29,24 +29,24 @@ async function fetchContractExecutionResults(
             });
             return parsedLog.args;
           } catch (err) {
-            console.error("❌ Error decoding event log:", err);
+            console.error("Error decoding event log:", err);
             return null;
           }
         } else {
-          console.error("⚠️ Invalid Response.");
+          console.error("Invalid Response.");
           return null;
         }
       } catch (error) {
         if (attempt < retries) {
           await new Promise((resolve) => setTimeout(resolve, delay));
         } else {
-          console.error("❌ Failed to obtain result.");
+          console.error("Failed to obtain result.");
           return null;
         }
       }
     }
   } catch (error) {
-    console.error("❌ Unexpected error:", error.message);
+    console.error("Unexpected error:", error.message);
     return null;
   }
 }

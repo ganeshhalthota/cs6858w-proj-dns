@@ -19,7 +19,7 @@ const contractId = ContractId.fromString(config.contract_id);
 
 async function renewDomain(accId, priKey, domain) {
   try {
-    console.log(`🔄 Renewing domain: ${domain}`);
+    console.log(`Renewing domain: ${domain}`);
 
     const client = Client.forTestnet();
     client.setOperator(accId, PrivateKey.fromString(priKey));
@@ -38,11 +38,11 @@ async function renewDomain(accId, priKey, domain) {
     const receipt = await txResponse.getReceipt(client);
 
     if (receipt.status.toString() !== "SUCCESS") {
-      console.error("❌ Transaction failed:", receipt.status.toString());
+      console.error("Transaction failed:", receipt.status.toString());
       return false;
     }
 
-    console.log(`✅ Domain renewed with Transaction ID: ${transactionId}`);
+    console.log(`Domain renewed with Transaction ID: ${transactionId}`);
 
     const result = await fetchContractExecutionResults(
       TransactionType.TX_TYPE_RENEWED,
@@ -59,7 +59,7 @@ async function renewDomain(accId, priKey, domain) {
 
     return true;
   } catch (error) {
-    console.error("❌ Error renewing domain:", error);
+    console.error("Error renewing domain:", error);
     return false;
   }
 }

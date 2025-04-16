@@ -40,21 +40,21 @@ async function initTransfer(accId, priKey, domain, newAccId) {
     const receipt = await txResponse.getReceipt(client);
 
     if (receipt.status.toString() !== "SUCCESS") {
-      console.error("❌ Transaction failed:", receipt.status.toString());
+      console.error("Transaction failed:", receipt.status.toString());
       return false;
     }
 
-    console.log(`✅ Domain transfer initiated with Transaction ID: ${transactionId}`);
+    console.log(`Domain transfer initiated with Transaction ID: ${transactionId}`);
     return true;
   } catch (error) {
-    console.error("❌ Error initiating transfer:", error);
+    console.error("Error initiating transfer:", error);
     return false;
   }
 }
 
 async function approveTransfer(accId, priKey, domain) {
   try {
-    console.log(`🚀 Completing transfer of domain: ${domain} → ${accId}`);
+    console.log(`Completing transfer of domain: ${domain} → ${accId}`);
 
     const client = Client.forTestnet();
     client.setOperator(accId, PrivateKey.fromString(priKey));
@@ -73,11 +73,11 @@ async function approveTransfer(accId, priKey, domain) {
     const receipt = await txResponse.getReceipt(client);
 
     if (receipt.status.toString() !== "SUCCESS") {
-      console.error("❌ Transaction failed:", receipt.status.toString());
+      console.error("Transaction failed:", receipt.status.toString());
       return false;
     }
 
-    console.log(`✅ Domain transferred with Transaction ID: ${transactionId}`);
+    console.log(`Domain transferred with Transaction ID: ${transactionId}`);
 
     // Fetch contract execution details
     const result = await fetchContractExecutionResults(
@@ -93,11 +93,11 @@ async function approveTransfer(accId, priKey, domain) {
       result.expiration
     );
 
-    console.log(`✅ Stored in registry`);
+    console.log(`Stored in registry`);
 
     return true;
   } catch (error) {
-    console.error("❌ Error transferring domain:", error);
+    console.error("Error transferring domain:", error);
     return false;
   }
 }

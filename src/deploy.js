@@ -16,7 +16,7 @@ async function deployContract() {
         const operatorKey = process.env.OPERATOR_PRIVATE_KEY;
 
         if (!operatorId || !operatorKey) {
-            throw new Error("❌ Missing OPERATOR_ACCOUNT_ID or OPERATOR_PRIVATE_KEY in .env");
+            throw new Error("Missing OPERATOR_ACCOUNT_ID or OPERATOR_PRIVATE_KEY in .env");
         }
 
         const client = Client.forTestnet().setOperator(
@@ -54,7 +54,7 @@ async function deployContract() {
         const abi = contractData.abi;
 
         if (!bytecode || bytecode.length < 10) {
-            throw new Error("❌ Compiled bytecode is empty or invalid.");
+            throw new Error("Compiled bytecode is empty or invalid.");
         }
 
         // Save ABI and Bytecode to artifacts/
@@ -79,10 +79,10 @@ async function deployContract() {
             metadata
         );
 
-        console.log("📦 ABI and Bytecode saved to artifacts/");
+        console.log("ABI and Bytecode saved to artifacts/");
 
         // Upload bytecode in chunks
-        console.log("📤 Uploading bytecode to Hedera...");
+        console.log("Uploading bytecode to Hedera...");
 
         // ref: https://docs.hedera.com/hedera/sdks-and-apis/sdks/smart-contracts/create-a-smart-contract
         //Create the transaction
@@ -104,13 +104,13 @@ async function deployContract() {
         console.log("The new contract ID is " + newContractId);
 
         if (!newContractId) {
-            throw new Error("❌ Failed to retrieve contract ID from deployment receipt.");
+            throw new Error("Failed to retrieve contract ID from deployment receipt.");
         }
 
-        console.log(`✅ Smart Contract deployed at: ${newContractId}`);
+        console.log(`Smart Contract deployed at: ${newContractId}`);
         process.exit(0);
     } catch (error) {
-        console.error("❌ Deployment failed:");
+        console.error("Deployment failed:");
         console.error(error.stack || error.message || error);
         process.exit(1);
     }

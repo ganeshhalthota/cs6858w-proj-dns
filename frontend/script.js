@@ -30,14 +30,14 @@ function registerDomain() {
   const domain = document.getElementById("regDomain").value;
   const ipv4 = document.getElementById("regIP").value;
 
-  handleRequest("/register", "POST", { accId, priKey, domain, ipv4 }, "⏳ Registering domain...");
+  handleRequest("/register", "POST", { accId, priKey, domain, ipv4 }, "Registering domain...");
 }
 
 function resolveDomain() {
   const domain = document.getElementById("resDomain").value;
 
   showSpinner();
-  showToast("🔍 Resolving domain...", "success");
+  showToast("Resolving domain...", "success");
   fetch("/resolve?domain=" + encodeURIComponent(domain))
     .then((res) =>
       res.text().then((text) => {
@@ -56,7 +56,7 @@ function renewDomain() {
   const { accId, priKey } = getCredentials();
   const domain = document.getElementById("renewDomain").value;
 
-  handleRequest("/renew", "POST", { accId, priKey, domain }, "🔄 Renewing domain...");
+  handleRequest("/renew", "POST", { accId, priKey, domain }, "Renewing domain...");
 }
 
 function initTx() {
@@ -64,7 +64,7 @@ function initTx() {
   const domain = document.getElementById("initTxDomain").value;
   const newAccId = document.getElementById("initTxAccId").value;
 
-  handleRequest("/init_transfer", "POST", { accId, priKey, domain, newAccId }, "🔁 Initiating transfer...");
+  handleRequest("/init_transfer", "POST", { accId, priKey, domain, newAccId }, "Initiating transfer...");
 }
 
 function completeTx() {
