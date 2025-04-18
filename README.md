@@ -46,7 +46,9 @@ Please rename it to .env and fill in the details of the accounts.
 
 #### Testing Setup
 
-TODO
+```bash
+node test/check_acc_balance.js
+```
 
 ### Usage
 - Start the server using `node server.js`
