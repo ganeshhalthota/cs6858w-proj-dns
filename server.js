@@ -15,13 +15,13 @@ const handleRequest = async (req, res, operation, successMessage, errorMessage) 
   try {
     const success = await operation(req.body);
     if (success) {
-      res.send(`✅ ${successMessage}`);
+      res.send(`${successMessage}`);
     } else {
-      res.status(500).send(`❌ ${errorMessage}`);
+      res.status(500).send(`${errorMessage}`);
     }
   } catch (err) {
     console.error(`${errorMessage} error:`, err);
-    res.status(500).send("❌ Internal server error");
+    res.status(500).send("Internal server error");
   }
 };
 
@@ -49,13 +49,13 @@ app.get("/resolve", async (req, res) => {
   try {
     const result = await resolveDomain(domain);
     if (result) {
-      res.send(`✅ Resolved IP: ${result}`);
+      res.send(`Resolved IP: ${result}`);
     } else {
-      res.status(404).send("❌ Domain not found or validation failed");
+      res.status(404).send("Domain not found or validation failed");
     }
   } catch (error) {
     console.error("Resolve error:", error);
-    res.status(500).send("❌ Internal Server Error during resolution");
+    res.status(500).send("Internal Server Error during resolution");
   }
 });
 
@@ -84,5 +84,5 @@ app.get("/", (req, res) => {
 
 // Start the server
 app.listen(3000, () => {
-  console.log("🌐 Server running at http://localhost:3000");
+  console.log("Server running at http://localhost:3000");
 });
