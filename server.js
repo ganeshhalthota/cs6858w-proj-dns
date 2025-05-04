@@ -27,7 +27,7 @@ const handleRequest = async (req, res, operation, successMessage, errorMessage) 
 
 // Register endpoint
 app.post("/register", (req, res) => {
-  handleRequest(req, res, 
+  handleRequest(req, res,
     ({ accId, priKey, domain, ipv4 }) => registerDomain(accId, priKey, domain, ipv4),
     "Domain registered successfully!",
     "Domain registration failed"
@@ -36,7 +36,7 @@ app.post("/register", (req, res) => {
 
 // Renew endpoint
 app.post("/renew", (req, res) => {
-  handleRequest(req, res, 
+  handleRequest(req, res,
     ({ accId, priKey, domain }) => renewDomain(accId, priKey, domain),
     "Domain renewed successfully!",
     "Domain renew failed"
@@ -61,7 +61,7 @@ app.get("/resolve", async (req, res) => {
 
 // Transfer Initiation endpoint
 app.post("/init_transfer", (req, res) => {
-  handleRequest(req, res, 
+  handleRequest(req, res,
     ({ accId, priKey, domain, newAccId }) => initTransfer(accId, priKey, domain, newAccId),
     "Domain Transfer Initiated!",
     "Domain Transfer failed"
@@ -70,7 +70,7 @@ app.post("/init_transfer", (req, res) => {
 
 // Transfer Approval endpoint
 app.post("/approve_transfer", (req, res) => {
-  handleRequest(req, res, 
+  handleRequest(req, res,
     ({ accId, priKey, domain }) => approveTransfer(accId, priKey, domain),
     "Domain Transfer Success!",
     "Domain Transfer failed"
